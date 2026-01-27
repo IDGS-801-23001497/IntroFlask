@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    
+    <h1>{{ titulo }}</h1>
+    
+    <ul>
+        {% for i in lista %}
+            <li>{{ i }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Hola Index</h1>
+
+{% endblock %}
