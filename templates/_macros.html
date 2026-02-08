@@ -14,3 +14,24 @@
     {%endfor%}
     {% endif %}
 {%endmacro%}
+
+{%macro opcion(field)%}
+<div class="mb-3">
+    <label class="form label">{{field.label}}</label>
+
+    {% for subfield in field %}
+    <div class="mb-3">
+        {{subfield(class="form-check-input") }}
+        <label class="form-check-label" for="{{subfield.id }}">
+          {{subfield.label.text}}  
+        </label>
+    </div>
+    {% endfor %}
+
+    {%if field.errors %}
+        {% for error in field.errors %}
+            <div style="color:red">{{ error }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+{%endmacro%}

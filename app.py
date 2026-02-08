@@ -11,7 +11,7 @@ csrf=CSRFProtect()
 @app.route("/")
 def index():
     titulo="Flask IDGS801"
-    lista=["juan","mario","pedro","dario"]
+    lista=["Juan","Mario","Pedro","Dario"]
     return render_template("index.html", titulo=titulo, lista=lista)
     
 
@@ -57,6 +57,43 @@ def usuarios():
 
     return render_template("usuarios.html", form=usuarios_class,
                            mat=mat, nom=nom, apa=apa, ama=ama, correo=correo)
+
+
+@app.route('/cinepolis', methods=["GET", "POST"])
+def cinepolis():
+    Nombre = ""
+    Compradores = 0
+    tarjCine = ""
+    Boletos = 0
+    total = 0
+    error = None
+    cinepolis_class=forms.CinepolisForm(request.form)
+
+    if request.method == "POST" and cinepolis_class.validate():
+        Nombre = cinepolis_class.nombre.data
+        Compradores = cinepolis_class.compradores.data
+        tarjCine = cinepolis_class.tarjeta.data
+        Boletos = cinepolis_class.boletos.data
+
+        if not Boletos or not Compradores:
+            error = "Error: Debes ingresar un número de boletos o compradores."
+            return render_template('cinepolis.html', form=cinepolis_class, error=error, total=total)
+        
+        if Boletos > Compradores * 7:
+            error = "Error: No se pueden comprar más de 7 boletos por comprador."
+            return render_template('cinepolis.html', form=cinepolis_class, error=error, total=total)
+        
+        total = Boletos * 12
+        if Boletos > 5:
+            total = total - (total * 0.15)  # Aplicar descuento del 15% si son 5 boletos
+        if Boletos >= 3 and Boletos <= 5:
+            total = total - (total * 0.10)  # Aplicar descuento del 10% si son entre 3 y 5 boletos
+
+        if tarjCine == "true":
+            total = total - (total * 0.10)  # Aplicar descuento del 10% por tarjeta Cinépolis
+        print(total)
+    return render_template('cinepolis.html', form=cinepolis_class,Nombre=Nombre, Compradores=Compradores, tarjCine=tarjCine, Boletos=Boletos, total=total)
+
 
 @app.route("/hola")
 def hola():
