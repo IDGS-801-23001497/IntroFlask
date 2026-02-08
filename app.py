@@ -3,6 +3,7 @@ from flask import flash
 from flask_wtf.csrf import CSRFProtect
 
 import forms
+import math
 
 app = Flask(__name__)
 app.secret_key='clave secreta'
@@ -93,6 +94,21 @@ def cinepolis():
             total = total - (total * 0.10)  # Aplicar descuento del 10% por tarjeta Cinépolis
         print(total)
     return render_template('cinepolis.html', form=cinepolis_class,Nombre=Nombre, Compradores=Compradores, tarjCine=tarjCine, Boletos=Boletos, total=total)
+
+@app.route('/distancia', methods=["GET", "POST"])
+def distancia():
+    x1=0
+    x2=0
+    y1=0
+    y2=0
+    res=0
+    if request.method == "POST":
+        x1=int(request.form.get("x1"))
+        x2=int(request.form.get("x2"))
+        y1=int(request.form.get("y1"))
+        y2=int(request.form.get("y2"))
+        res = float(math.sqrt(((x2 - x1)*(x2-x1) + (y2 - y1)*(y2 - y1))))
+    return render_template('distancia.html',x1=x1,x2=x2,y1=y1,y2=y2,res=res)
 
 
 @app.route("/hola")
